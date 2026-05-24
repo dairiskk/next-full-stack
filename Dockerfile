@@ -13,8 +13,8 @@ ENV NEXT_PUBLIC_APP_NAME=$NEXT_PUBLIC_APP_NAME
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install all dependencies (including devDependencies needed for build)
-RUN npm ci
+# Install all dependencies, including devDependencies needed for the production build
+RUN npm ci --include=dev
 
 # Copy source code
 COPY . .
@@ -22,8 +22,8 @@ COPY . .
 # Build Next.js app
 RUN npm run build
 
-# Clean up node_modules and reinstall only production dependencies
-RUN npm prune --production
+# Clean up node_modules and keep only production dependencies
+RUN npm prune --omit=dev
 
 # Production stage
 FROM node:20-alpine
