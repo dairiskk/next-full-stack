@@ -6,14 +6,17 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
 # Build Next.js app
 RUN npm run build
+
+# Clean up node_modules and reinstall only production dependencies
+RUN npm prune --production
 
 # Production stage
 FROM node:20-alpine
