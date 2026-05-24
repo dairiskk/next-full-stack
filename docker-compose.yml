@@ -5,10 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+        - NEXT_PUBLIC_APP_NAME=Next Full Stack
     container_name: next-full-stack
     restart: always
     ports:
       - "${APP_PORT:-3001}:3000"
+    env_file:
+      - .env.production
     environment:
       - NODE_ENV=production
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
